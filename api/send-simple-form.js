@@ -9,12 +9,11 @@ export const config = {
 };
 
 export default async function handler(req, res) {
-
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
   try {
+
+    if (req.method !== "POST") {
+      return res.status(405).json({ error: "Method not allowed" });
+    }
 
     const form = formidable({
       multiples: false,
@@ -44,9 +43,9 @@ export default async function handler(req, res) {
         ? files.fileInput[0]
         : files.fileInput;
 
-      if (file?.filepath) {
+      if (file?.filepath && file.size > 0) {
         attachments.push({
-          filename: file.originalFilename || "document",
+          filename: file.originalFilename || "CV",
           content: fs.readFileSync(file.filepath),
         });
       }
@@ -62,6 +61,7 @@ Email: ${fields.email}
 Data de naixement: ${fields.dataNaixement}
 DNI: ${fields.dni}
 Prestació: ${fields.prestacio ? "Sí" : "No"}
+Comunicacions: ${fields.comunicacions ? "Sí" : "No"}
       `,
       attachments,
     });
@@ -73,4 +73,3 @@ Prestació: ${fields.prestacio ? "Sí" : "No"}
     return res.status(500).json({ error: err.message || "Server error" });
   }
 }
-
