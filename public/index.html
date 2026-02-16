@@ -95,7 +95,6 @@ input:focus {
   padding: 0 18px;
   height: 100%;
   font-size: 13px;
-  font-weight: 500;
   cursor: pointer;
 }
 
@@ -132,50 +131,48 @@ input:focus {
 <body>
 
 <div class="form-container">
-<form id="simpleForm">
+  <form id="myForm">
 
-<div class="form-group">
-<label>Nom</label>
-<input type="text" name="nom" required>
-</div>
+    <div class="form-group">
+      <label>Nom</label>
+      <input type="text" name="nom" required>
+    </div>
 
-<div class="form-group">
-<label>Correu electrònic</label>
-<input type="email" name="email" required>
-</div>
+    <div class="form-group">
+      <label>Correu electrònic</label>
+      <input type="email" name="email" required>
+    </div>
 
-<div class="form-group">
-<label>Data de naixement</label>
-<input type="date" name="dataNaixement" required>
-</div>
+    <div class="form-group">
+      <label>Data de naixement</label>
+      <input type="date" name="dataNaixement" required>
+    </div>
 
-<div class="form-group">
-<label>DNI</label>
-<input type="text" name="dni" required>
-</div>
+    <div class="form-group">
+      <label>DNI</label>
+      <input type="text" name="dni" required>
+    </div>
 
-<div class="checkbox-group">
-<input type="checkbox" name="prestacio">
-<label>Cobro una prestació com a demandant d’ocupació</label>
-</div>
+    <div class="checkbox-group">
+      <input type="checkbox" id="prestacio" name="prestacio">
+      <label for="prestacio">
+        Cobro una prestació com a demandant d’ocupació
+      </label>
+    </div>
 
-<div class="file-upload">
-<button type="button" id="fileBtn">Seleccionar arxiu</button>
-<span id="fileName">Cap arxiu seleccionat</span>
-<input type="file" id="fileInput" name="fileInput">
-</div>
+    <div class="file-upload">
+      <button type="button" id="fileBtn">Seleccionar arxiu</button>
+      <span id="fileName">Cap arxiu seleccionat</span>
+      <input type="file" id="fileInput" name="fileInput">
+    </div>
 
-<div class="checkbox-group">
-<input type="checkbox" name="termes" required>
-<label>Accepto els termes i condicions</label>
-</div>
+    <button type="submit" class="submit-btn">Enviar</button>
 
-<button type="submit" class="submit-btn">Enviar</button>
-
-</form>
+  </form>
 </div>
 
 <script>
+const form = document.getElementById("myForm");
 const fileBtn = document.getElementById("fileBtn");
 const fileInput = document.getElementById("fileInput");
 const fileName = document.getElementById("fileName");
@@ -188,22 +185,22 @@ fileInput.addEventListener("change", () => {
     : "Cap arxiu seleccionat";
 });
 
-document.getElementById("simpleForm").addEventListener("submit", async function(e){
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const formData = new FormData(this);
+  const formData = new FormData(form);
 
   const res = await fetch("/api/send-simple-form", {
     method: "POST",
-    body: formData
+    body: formData,
   });
 
-  if(res.ok){
-    alert("Formulari enviat correctament!");
-    this.reset();
+  if (res.ok) {
+    alert("Enviat correctament!");
+    form.reset();
     fileName.textContent = "Cap arxiu seleccionat";
   } else {
-    alert("Error en l'enviament.");
+    alert("Error en l'enviament");
   }
 });
 </script>
