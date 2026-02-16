@@ -1,1 +1,77 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulari</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  max-width: 500px;
+  margin: 60px auto;
+}
+
+input, button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+button {
+  background: #d6002a;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Formulari</h2>
+
+<form id="form">
+
+  <input type="text" name="nom" placeholder="Nom" required>
+  <input type="email" name="email" placeholder="Correu electrònic" required>
+  <input type="date" name="dataNaixement" required>
+  <input type="text" name="dni" placeholder="DNI" required>
+
+  <label>
+    <input type="checkbox" name="prestacio">
+    Cobro prestació
+  </label>
+
+  <input type="file" name="fileInput">
+
+  <button type="submit">Enviar</button>
+
+</form>
+
+<script>
+const form = document.getElementById("form");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(form);
+
+  const res = await fetch("/api/send-simple-form", {
+    method: "POST",
+    body: formData
+  });
+
+  if (res.ok) {
+    alert("Enviat correctament ✅");
+    form.reset();
+  } else {
+    alert("Error en l'enviament ❌");
+  }
+});
+</script>
+
+</body>
+</html>
 
