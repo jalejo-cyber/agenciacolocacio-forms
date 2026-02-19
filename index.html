@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Formulari</title>
+<title>Inscripció Agència de Col·locació</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 :root {
   --primary: #d6002a;
-  --input-bg: #e9e9e9;
+  --input-bg: #ffffff;
   --label-color: #8f8f8f;
   --text-color: #2d2d2d;
+  --page-bg: #eeeeee;
 }
 
 * {
@@ -22,99 +23,99 @@
 
 body {
   margin: 0;
-  background: #ffffff;
+  background: var(--page-bg);
   display: flex;
   justify-content: center;
-  padding: 60px 20px;
+  padding: 30px 20px;
 }
 
 .form-container {
   width: 100%;
-  max-width: 520px;
+  max-width: 1100px;
+  background: white;
+  padding: 30px;
+  border-radius: 14px;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
 }
 
 .form-group {
-  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 label {
-  display: block;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--label-color);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="date"] {
-  width: 100%;
-  height: 48px;
-  padding: 0 16px;
-  border-radius: 10px;
+input, select, textarea {
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 8px;
   border: none;
   background: var(--input-bg);
-  font-size: 14px;
-  color: var(--text-color);
+  font-size: 13px;
   outline: none;
+  border: 1px solid #ddd;
 }
 
-input:focus {
+textarea {
+  height: 80px;
+  padding: 10px;
+  resize: none;
+}
+
+input:focus, select:focus, textarea:focus {
   box-shadow: 0 0 0 2px rgba(214, 0, 42, 0.15);
 }
 
-.checkbox-group {
+.full {
+  grid-column: span 3;
+}
+
+.radio-group {
   display: flex;
+  gap: 20px;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 18px;
-}
-
-.checkbox-group input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--primary);
-  cursor: pointer;
-}
-
-.checkbox-group label {
-  margin: 0;
-  font-size: 14px;
-  color: var(--text-color);
-}
-
-.checkbox-group a {
-  color: var(--text-color);
-  text-decoration: underline;
 }
 
 .file-upload {
   display: flex;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
-  border: 1px solid #dddddd;
+  border: 1px solid #ddd;
   background: #f5f5f5;
-  height: 48px;
-  margin-bottom: 18px;
+  height: 44px;
 }
 
 .file-upload button {
   background: var(--primary);
   color: white;
   border: none;
-  padding: 0 22px;
+  padding: 0 18px;
   height: 100%;
-  font-size: 14px;
-  font-weight: 500;
   cursor: pointer;
+  font-size: 13px;
 }
 
 .file-upload span {
-  padding: 0 16px;
-  font-size: 14px;
-  color: #9c9c9c;
+  padding: 0 14px;
+  font-size: 13px;
   flex: 1;
+  color: #999;
 }
 
 .file-upload input {
@@ -122,22 +123,29 @@ input:focus {
 }
 
 .submit-btn {
-  margin-top: 10px;
+  margin-top: 25px;
   background: var(--primary);
   color: white;
   border: none;
-  height: 52px;
+  height: 48px;
   padding: 0 40px;
   border-radius: 999px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.25s ease;
 }
 
 .submit-btn:hover {
   opacity: 0.92;
-  transform: translateY(-1px);
+}
+
+@media(max-width: 900px){
+  .grid{
+    grid-template-columns: 1fr;
+  }
+  .full{
+    grid-column: span 1;
+  }
 }
 </style>
 </head>
@@ -145,58 +153,134 @@ input:focus {
 <body>
 
 <div class="form-container">
-  <form id="simpleForm">
+<h2>Inscripció Agència de Col·locació</h2>
 
-    <div class="form-group">
-      <label>Nom</label>
-      <input type="text" name="nom" required>
-    </div>
+<form id="agenciaForm" enctype="multipart/form-data">
 
-    <div class="form-group">
-      <label>Correu electrònic</label>
-      <input type="email" name="email" required>
-    </div>
+<div class="grid">
 
-    <div class="form-group">
-      <label>Data de naixement</label>
-      <input type="date" name="dataNaixement" required>
-    </div>
+<div class="form-group">
+<label>DNI / NIE</label>
+<input type="text" name="dni" required>
+</div>
 
-    <div class="form-group">
-      <label>DNI o NIE</label>
-      <input type="text" name="dni" required>
-    </div>
+<div class="form-group">
+<label>Nom</label>
+<input type="text" name="nom" required>
+</div>
 
-    <div class="checkbox-group">
-      <input type="checkbox" name="prestacio" value="si" id="prestacio">
-      <label for="prestacio">
-        Cobro una prestació com a demandant d’ocupació
-      </label>
-    </div>
+<div class="form-group">
+<label>Primer cognom</label>
+<input type="text" name="cognom1" required>
+</div>
 
-    <div class="file-upload">
-      <button type="button" id="fileBtn">Seleccionar CV</button>
-      <span id="fileName">Cap arxiu seleccionat</span>
-      <input type="file" name="fileInput" id="fileInput">
-    </div>
+<div class="form-group">
+<label>Segon cognom</label>
+<input type="text" name="cognom2">
+</div>
 
-    <div class="checkbox-group">
-      <input type="checkbox" id="termes" required>
-      <label for="termes">
-        Accepto els <a href="#">termes i condicions</a>
-      </label>
-    </div>
+<div class="form-group">
+<label>Data de naixement</label>
+<input type="date" name="dataNaixement" required>
+</div>
 
-    <div class="checkbox-group">
-      <input type="checkbox" name="comunicacions" value="si" id="comunicacions">
-      <label for="comunicacions">
-        Accepto rebre comunicacions comercials
-      </label>
-    </div>
+<div class="form-group">
+<label>Gènere</label>
+<select name="genere" required>
+<option value="">Selecciona</option>
+<option>Home</option>
+<option>Dona</option>
+<option>No binari</option>
+</select>
+</div>
 
-    <button type="submit" class="submit-btn">Enviar</button>
+<div class="form-group">
+<label>Nivell d'estudis</label>
+<select name="estudis" required>
+<option value="">Selecciona</option>
+<option>Sense estudis</option>
+<option>ESO / Graduat escolar</option>
+<option>Batxillerat</option>
+<option>FP Grau Mitjà</option>
+<option>FP Grau Superior</option>
+<option>Universitaris</option>
+</select>
+</div>
 
-  </form>
+<div class="form-group">
+<label>Discapacitat</label>
+<select name="discapacitat" required>
+<option value="">Selecciona</option>
+<option>Sí</option>
+<option>No</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Prestació per desocupació</label>
+<select name="prestacio" required>
+<option value="">Selecciona</option>
+<option>Sí</option>
+<option>No</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Població</label>
+<input type="text" name="poblacio" required>
+</div>
+
+<div class="form-group">
+<label>Correu electrònic</label>
+<input type="email" name="email" required>
+</div>
+
+<div class="form-group">
+<label>Telèfon</label>
+<input type="text" name="telefon" required>
+</div>
+
+<div class="form-group full">
+<label>Sector laboral d’interès</label>
+<select name="sector" required>
+<option value="">Selecciona</option>
+<option>Administració / Comptabilitat</option>
+<option>Comercial / Vendes</option>
+<option>Atenció al client</option>
+<option>RRHH</option>
+<option>Docència</option>
+<option>Restauració</option>
+<option>Logística</option>
+<option>Salut / Social</option>
+<option>Limpieza / Manteniment</option>
+<option>Informàtica / Digital</option>
+<option>Construcció</option>
+<option>Altres</option>
+</select>
+</div>
+
+<div class="form-group full">
+<label>Adjuntar CV</label>
+<div class="file-upload">
+<button type="button" id="fileBtn">Seleccionar arxiu</button>
+<span id="fileName">Cap arxiu seleccionat</span>
+<input type="file" name="cv" id="fileInput" required>
+</div>
+</div>
+
+<div class="form-group full">
+<label>Avís legal *</label>
+<div class="radio-group">
+<label><input type="radio" name="legal" value="accepto" required> Accepto</label>
+<label><input type="radio" name="legal" value="no_accepto" required> No accepto</label>
+</div>
+</div>
+
+</div>
+
+<button type="submit" class="submit-btn">Enviar inscripció</button>
+
+</form>
 </div>
 
 <script>
@@ -212,18 +296,18 @@ fileInput.addEventListener("change", () => {
     : "Cap arxiu seleccionat";
 });
 
-document.getElementById("simpleForm").addEventListener("submit", async function(e){
+document.getElementById("agenciaForm").addEventListener("submit", async function(e){
   e.preventDefault();
 
   const formData = new FormData(this);
 
-  const res = await fetch("/api/send-simple-form", {
+  const res = await fetch("/api/send-form", {
     method: "POST",
     body: formData
   });
 
   if(res.ok){
-    alert("Enviat correctament");
+    alert("Inscripció enviada correctament");
     this.reset();
     fileName.textContent = "Cap arxiu seleccionat";
   } else {
@@ -234,3 +318,4 @@ document.getElementById("simpleForm").addEventListener("submit", async function(
 
 </body>
 </html>
+
