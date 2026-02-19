@@ -55,7 +55,7 @@ export default async function handler(req, res) {
       },
     });
 
-    // 🧾 TAULA HTML PROFESSIONAL
+    // 🧾 TAULA HTML
     const htmlTable = `
     <h2>Nova inscripció - Agència de Col·locació</h2>
     <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;font-family:Arial;">
@@ -80,12 +80,29 @@ export default async function handler(req, res) {
     </table>
     `;
 
+    // ✉️ ENVIAR CORREU
     await transporter.sendMail({
       from: `"Agència Foment Formació" <${process.env.EMAIL_USER}>`,
       to: "jalejo@fomentformacio.com",
       subject: "Nova inscripció Agència de Col·locació",
       html: htmlTable,
       attachments,
+    });
+
+    // 📊 ENVIAR A GOOGLE SHEETS
+    await fetch(process.env.GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        tipusDocument,
+        dni: fields.dni,
+        nom: fields.nom,
+        cognom1: fields.cognom1,
+        cognom2: fields.cognom2,
+        email: fields.email,
+        telefon: fields.telefon,
+        sector: fields.sector
+      })
     });
 
     return res.status(200).json({ ok: true });
@@ -95,17 +112,3 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: err.message || "Server error" });
   }
 }
-await fetch("URL_GOOGLE_SCRIPT", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    tipusDocument,
-    dni: fields.dni,
-    nom: fields.nom,
-    cognom1: fields.cognom1,
-    cognom2: fields.cognom2,
-    email: fields.email,
-    telefon: fields.telefon,
-    sector: fields.sector
-  })
-});
