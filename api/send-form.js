@@ -69,13 +69,13 @@ export default async function handler(req, res) {
       <tr><td><strong>Estudis</strong></td><td>${fields.estudis}</td></tr>
       <tr><td><strong>Discapacitat</strong></td><td>${fields.discapacitat}</td></tr>
       <tr><td><strong>Feina últims 2 mesos</strong></td><td>${fields.feina2mesos}</td></tr>
-      <tr><td><strong>Prestació</strong></td><td>${fields.prestacio}</td></tr>
-      <tr><td><strong>Col·lectiu</strong></td><td>${fields.collectiu}</td></tr>
-      <tr><td><strong>Disponibilitat</strong></td><td>${fields.disponibilitat}</td></tr>
-      <tr><td><strong>Sector</strong></td><td>${fields.sector}</td></tr>
-      <tr><td><strong>Població</strong></td><td>${fields.poblacio}</td></tr>
       <tr><td><strong>Email</strong></td><td>${fields.email}</td></tr>
       <tr><td><strong>Telèfon</strong></td><td>${fields.telefon}</td></tr>
+      <tr><td><strong>Població</strong></td><td>${fields.poblacio}</td></tr>
+      <tr><td><strong>Prestació</strong></td><td>${fields.prestacio}</td></tr>
+      <tr><td><strong>Col·lectiu</strong></td><td>${fields.collectiu}</td></tr>
+      <tr><td><strong>Sector</strong></td><td>${fields.sector}</td></tr>
+      <tr><td><strong>Disponibilitat</strong></td><td>${fields.disponibilitat}</td></tr>
       <tr><td><strong>Acceptació legal</strong></td><td>${fields.legal}</td></tr>
     </table>
     `;
