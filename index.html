@@ -175,12 +175,12 @@ input:focus,select:focus,textarea:focus{
 <label>Nivell d'estudis</label>
 <select name="estudis" required>
 <option value="">Selecciona</option>
-<option>Sense estudis</option>
-<option>ESO</option>
-<option>Batxillerat</option>
-<option>FP Grau Mitjà</option>
-<option>FP Grau Superior</option>
-<option>Universitaris</option>
+<option>00 Sense estudis</option>
+<option>10 Graduat escolar/ESO</option>
+<option>20 Batxillerat</option>
+<option>30 Títol de Tècnic/a/FP-CF Grau Mitjà/Certificat Profesionalitat Nivell 2</option>
+<option>30 Títol de Tècnic/a Superior/FP-CF Grau Superior/Certificat Profesionalitat Nivell 3</option>
+<option>30 Estudis universitaris de 1r cicle (Diplomatura - Grau)/2n cicle (Llicenciatura / Màster)/3er cicle (Doctorat)</option>
 </select>
 </div>
 
@@ -203,6 +203,21 @@ input:focus,select:focus,textarea:focus{
 </div>
 
 <div class="form-group">
+<label>Correu electrònic</label>
+<input type="email" name="email" required>
+</div>
+
+<div class="form-group">
+<label>Telèfon</label>
+<input type="text" name="telefon" required>
+</div>
+
+<div class="form-group">
+<label>Població</label>
+<input type="text" name="poblacio" required>
+</div>
+
+<div class="form-group">
 <label>Prestació per desocupació</label>
 <select name="prestacio" required>
 <option value="">Selecciona</option>
@@ -222,31 +237,6 @@ input:focus,select:focus,textarea:focus{
 </select>
 </div>
 
-<div class="form-group">
-<label>Disponibilitat horària</label>
-<select name="disponibilitat" required>
-<option value="">Selecciona</option>
-<option>Jornada completa</option>
-<option>Jornada parcial</option>
-<option>Indiferent</option>
-</select>
-</div>
-
-<div class="form-group">
-<label>Població</label>
-<input type="text" name="poblacio" required>
-</div>
-
-<div class="form-group">
-<label>Correu electrònic</label>
-<input type="email" name="email" required>
-</div>
-
-<div class="form-group">
-<label>Telèfon</label>
-<input type="text" name="telefon" required>
-</div>
-
 <div class="form-group full">
 <label>Sector laboral d’interès</label>
 <select name="sector" required>
@@ -257,12 +247,25 @@ input:focus,select:focus,textarea:focus{
 <option>RRHH</option>
 <option>Docència</option>
 <option>Restauració</option>
-<option>Logística</option>
-<option>Salut / Social</option>
-<option>Limpieza / Manteniment</option>
-<option>Informàtica / Digital</option>
-<option>Construcció</option>
+<option>Logística, transports i mobilitat</option>
+<option>Salut i atenció a persones/Tercer sector (social)</option>
+<option>Neteja/ Manteniment</option>
+<option>Dret, consultoria i legislació/Auditoria</option>
+<option>XXSS/Transformació digital/Informàtica/Telecomunicacions</option>
+<option>Construcció i instal·lacions (fuster,soldador,electricista,...)</option>
+<option>Artesania i produccions artístiques</option>
+<option>Oci i benestar</option>
 <option>Altres</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Disponibilitat horària</label>
+<select name="disponibilitat" required>
+<option value="">Selecciona</option>
+<option>Jornada completa</option>
+<option>Jornada parcial</option>
+<option>Indiferent</option>
 </select>
 </div>
 
