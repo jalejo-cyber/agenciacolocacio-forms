@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import formidable from "formidable";
 import fs from "fs";
+import axios from "axios";
 
 export const config = {
   api: {
@@ -10,7 +11,6 @@ export const config = {
 
 export default async function handler(req, res) {
   try {
-
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Method not allowed" });
     }
@@ -28,6 +28,17 @@ export default async function handler(req, res) {
       });
     });
 
+    const dniValue = fields.dni?.toString().trim() || "";
+
+    let tipusDocument = "";
+    if (/^[0-9]/.test(dniValue)) {
+      tipusDocument = "DNI";
+    } else if (/^[A-Za-z]/.test(dniValue)) {
+      tipusDocument = "NIE";
+    } else {
+      tipusDocument = "No definit";
+    }
+
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -38,38 +49,57 @@ export default async function handler(req, res) {
 
     const attachments = [];
 
-    if (files.fileInput) {
-      const file = Array.isArray(files.fileInput)
-        ? files.fileInput[0]
-        : files.fileInput;
+    if (files.cv) {
+      const file = Array.isArray(files.cv)
+        ? files.cv[0]
+        : files.cv;
 
-      if (file?.filepath && file.size > 0) {
+      if (file?.filepath) {
         attachments.push({
-          filename: file.originalFilename || "CV",
+          filename: file.originalFilename || "cv.pdf",
           content: fs.readFileSync(file.filepath),
         });
       }
     }
 
     await transporter.sendMail({
-      from: `"Formulari Web" <${process.env.EMAIL_USER}>`,
+      from: `"Agència de Col·locació" <${process.env.EMAIL_USER}>`,
       to: "jalejo@fomentformacio.com",
-      subject: "Nou formulari rebut",
-      text: `
-Nom: ${fields.nom}
-Email: ${fields.email}
-Data de naixement: ${fields.dataNaixement}
-DNI: ${fields.dni}
-Prestació: ${fields.prestacio ? "Sí" : "No"}
-Comunicacions: ${fields.comunicacions ? "Sí" : "No"}
+      subject: "Nova inscripció Agència de Col·locació",
+      html: `
+      <h2>Nova inscripció</h2>
+      <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;font-family:Arial;font-size:14px;">
+        <tr><td><strong>DNI/NIE</strong></td><td>${dniValue}</td></tr>
+        <tr><td><strong>Tipus document</strong></td><td>${tipusDocument}</td></tr>
+        <tr><td><strong>Nom</strong></td><td>${fields.nom}</td></tr>
+        <tr><td><strong>Primer Cognom</strong></td><td>${fields.cognom1}</td></tr>
+        <tr><td><strong>Segon Cognom</strong></td><td>${fields.cognom2 || "-"}</td></tr>
+        <tr><td><strong>Email</strong></td><td>${fields.email}</td></tr>
+        <tr><td><strong>Telèfon</strong></td><td>${fields.telefon}</td></tr>
+        <tr><td><strong>Població</strong></td><td>${fields.poblacio}</td></tr>
+        <tr><td><strong>Sector</strong></td><td>${fields.sector}</td></tr>
+      </table>
       `,
       attachments,
+    });
+
+    // 🔗 Enviar a Google Sheets
+    await axios.post(process.env.GOOGLE_SCRIPT_URL, {
+      dni: dniValue,
+      tipusDocument,
+      nom: fields.nom,
+      cognom1: fields.cognom1,
+      cognom2: fields.cognom2 || "",
+      email: fields.email,
+      telefon: fields.telefon,
+      poblacio: fields.poblacio,
+      sector: fields.sector,
     });
 
     return res.status(200).json({ ok: true });
 
   } catch (err) {
     console.error("ERROR REAL:", err);
-    return res.status(500).json({ error: err.message || "Server error" });
+    return res.status(500).json({ error: err.message });
   }
 }
