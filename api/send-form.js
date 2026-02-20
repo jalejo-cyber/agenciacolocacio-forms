@@ -28,9 +28,15 @@ export default async function handler(req, res) {
       });
     });
 
-    // 🔎 CLASSIFICAR DNI / NIE
-    const dniValue = fields.dni || "";
-    const tipusDocument = /^[0-9]/.test(dniValue) ? "DNI" : "NIE";
+ // 🔎 CLASSIFICACIONS AUTOMÀTIQUES   
+const esNIE = /^[A-Za-z]/.test(fields.dni);
+const teNIE = esNIE ? "Sí" : "No";
+
+const teCollectiu =
+  fields.discapacitat === "Sí" ||
+  fields.collectiu !== "Cap"
+    ? "Sí"
+    : "No";
 
     // 📎 ADJUNT
     const attachments = [];
@@ -89,8 +95,8 @@ export default async function handler(req, res) {
       attachments,
     });
 
-    // --- ENVIAR A GOOGLE SHEETS (després del correu) ---
-const googleRes = await fetch(process.env.GOOGLE_SCRIPT_URL, {
+// 📊 ENVIAR A GOOGLE SHEETS
+await fetch(process.env.GOOGLE_SCRIPT_URL, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
@@ -102,12 +108,13 @@ const googleRes = await fetch(process.env.GOOGLE_SCRIPT_URL, {
     genere: fields.genere,
     estudis: fields.estudis,
     discapacitat: fields.discapacitat,
+    teNIE,
+    teCollectiu,
     feina2mesos: fields.feina2mesos,
     email: fields.email,
     telefon: fields.telefon,
     poblacio: fields.poblacio,
     prestacio: fields.prestacio,
-    collectiu: fields.collectiu,
     sector: fields.sector,
     disponibilitat: fields.disponibilitat
   })
