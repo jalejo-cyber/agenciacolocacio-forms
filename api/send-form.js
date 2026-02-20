@@ -29,6 +29,7 @@ export default async function handler(req, res) {
     });
 
  // 🔎 CLASSIFICACIONS AUTOMÀTIQUES   
+const { fields, files } = await new Promise(...)    
 const dniValue = fields.dni || "";
 const tipusDocument = /^[0-9]/.test(dniValue) ? "DNI" : "NIE";
 
