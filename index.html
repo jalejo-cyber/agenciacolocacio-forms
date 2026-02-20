@@ -377,6 +377,26 @@ Si vostè llegeix aquest missatge i no és el destinatari assenyalat, l'empleat 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
+  const discapacitatSelect = document.querySelector("select[name='discapacitat']");
+const collectiuSelect = document.querySelector("select[name='collectiu']");
+
+if(discapacitatSelect && collectiuSelect){
+
+  discapacitatSelect.addEventListener("change", function(){
+
+    if(this.value === "Sí"){
+      collectiuSelect.value = "Cap";   // posa Cap automàticament
+      collectiuSelect.disabled = true; // desactiva
+      collectiuSelect.style.opacity = "0.6";
+    } else {
+      collectiuSelect.disabled = false; // torna a activar
+      collectiuSelect.style.opacity = "1";
+    }
+
+  });
+
+}
+
   const fileBtn = document.getElementById("fileBtn");
   const fileInput = document.getElementById("fileInput");
   const fileName = document.getElementById("fileName");
