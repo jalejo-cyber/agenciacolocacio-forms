@@ -34,7 +34,7 @@ const tipusDocument = /^[0-9]/.test(dniValue) ? "DNI" : "NIE";
 
 const teCollectiu =
   fields.discapacitat === "Sí" ||
-  fields.collectiu !== "Cap"
+  fields.collectiu !== "Dona"
     ? "Sí"
     : "No";
 
