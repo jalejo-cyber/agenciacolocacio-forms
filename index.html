@@ -1,4 +1,158 @@
 <!DOCTYPE html> 
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscripció Agència de Col·locació</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --primary: #d6002a;
+  --label-color: #8f8f8f;
+  --text-color: #2d2d2d;
+  --page-bg: #eeeeee;
+}
+
+*{box-sizing:border-box;font-family:'Montserrat',sans-serif;}
+
+body{
+  margin:0;
+  background:var(--page-bg);
+  display:flex;
+  justify-content:center;
+  padding:30px 20px;
+}
+
+.form-container{
+  width:100%;
+  max-width:1200px;
+  background:white;
+  padding:30px;
+  border-radius:14px;
+}
+
+h2{
+  margin-top:0;
+  margin-bottom:25px;
+}
+
+.section-title{
+  grid-column:span 3;
+  font-size:14px;
+  font-weight:600;
+  color:#333;
+  margin:10px 0 -6px;
+  padding:10px 0;
+  border-bottom:1px solid #eee;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:22px;
+}
+
+.form-group{
+  display:flex;
+  flex-direction:column;
+}
+
+label{
+  font-size:13px;
+  font-weight:500;
+  color:var(--label-color);
+  margin-bottom:6px;
+}
+
+input,select,textarea{
+  width:100%;
+  height:48px;
+  padding:0 14px;
+  border-radius:10px;
+  border:1px solid #e2e2e2;
+  font-size:14px;
+  background:#fafafa;
+  outline:none;
+}
+
+textarea{
+  height:120px;
+  padding:12px;
+}
+
+input:focus,select:focus,textarea:focus{
+  background:white;
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(214,0,42,0.12);
+}
+
+.full{grid-column:span 3;}
+
+.radio-group{
+  display:flex;
+  gap:18px;
+  margin-top:10px;
+}
+
+.radio-group label{
+  font-size:13px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  cursor:pointer;
+}
+
+.radio-group input[type="radio"]{
+  width:16px;
+  height:16px;
+  accent-color:var(--primary);
+}
+
+.file-upload{
+  display:flex;
+  align-items:center;
+  border-radius:10px;
+  border:1px solid #e2e2e2;
+  background:#fafafa;
+  height:48px;
+  overflow:hidden;
+}
+
+.file-upload button{
+  background:var(--primary);
+  color:white;
+  border:none;
+  padding:0 20px;
+  height:100%;
+  cursor:pointer;
+}
+
+.file-upload span{
+  padding:0 14px;
+  flex:1;
+  font-size:14px;
+  color:#777;
+}
+
+.file-upload input{display:none;}
+
+.submit-btn{
+  margin-top:30px;
+  background:var(--primary);
+  color:white;
+  border:none;
+  height:52px;
+  padding:0 45px;
+  border-radius:999px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+/* ===== POPUP CENTRAT ===== */
+
 .success-modal{
   position:fixed;
   top:50%;
@@ -214,6 +368,12 @@ Si vostè llegeix aquest missatge i no és el destinatari assenyalat, l'empleat 
 </form>
 </div>
 
+<!-- POPUP -->
+<div class="success-modal" id="successModal">
+  <h3>T'has inscrit a l'agència de col·locació amb èxit!</h3>
+  <button type="button" onclick="closeModal()">D'acord</button>
+</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", function(){
 
@@ -223,43 +383,36 @@ document.addEventListener("DOMContentLoaded", function(){
   const modal = document.getElementById("successModal");
   const form = document.getElementById("agenciaForm");
 
-  if(fileBtn && fileInput){
-    fileBtn.addEventListener("click", function(){
-      fileInput.click();
-    });
+  fileBtn.addEventListener("click", () => fileInput.click());
 
-    fileInput.addEventListener("change", function(){
-      fileName.textContent = fileInput.files.length
-        ? fileInput.files[0].name
-        : "Cap arxiu seleccionat";
-    });
-  }
+  fileInput.addEventListener("change", () => {
+    fileName.textContent = fileInput.files.length
+      ? fileInput.files[0].name
+      : "Cap arxiu seleccionat";
+  });
 
-  if(form){
-    form.addEventListener("submit", async function(e){
-      e.preventDefault();
+  form.addEventListener("submit", async function(e){
+    e.preventDefault();
+    const formData = new FormData(this);
 
-      const formData = new FormData(this);
+    try{
+      const res = await fetch("/api/send-form", {
+        method: "POST",
+        body: formData
+      });
 
-      try{
-        const res = await fetch("/api/send-form", {
-          method: "POST",
-          body: formData
-        });
-
-        if(res.ok){
-          modal.classList.add("active");
-          this.reset();
-          fileName.textContent = "Cap arxiu seleccionat";
-        } else {
-          alert("Error en l'enviament");
-        }
-
-      } catch(err){
-        alert("Error de connexió");
+      if(res.ok){
+        modal.classList.add("active");
+        this.reset();
+        fileName.textContent = "Cap arxiu seleccionat";
+      } else {
+        alert("Error en l'enviament");
       }
-    });
-  }
+
+    } catch(err){
+      alert("Error de connexió");
+    }
+  });
 
   window.closeModal = function(){
     modal.classList.remove("active");
@@ -268,17 +421,6 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 </script>
 
-function closePopup(){
-  document.getElementById("successPopup").style.display = "none";
-}
-
-  <div class="success-modal" id="successModal">
-  <h3>T'has inscrit a l'agència de col·locació amb èxit!</h3>
-  <button type="button" onclick="closeModal()">D'acord</button>
-    
-</div>
 </body>
 </html>
-
-
 
