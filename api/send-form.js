@@ -34,10 +34,10 @@ export default async function handler(req, res) {
     const teNIE = /^[0-9]/.test(dniValue) ? "No" : "Sí";
 
     const teCollectiu =
-      fields.discapacitat === "Sí" ||
-      fields.collectiu !== "Cap"
-        ? "Sí"
-        : "No";
+  fields.discapacitat === "Sí" ||
+  (fields.collectiu && fields.collectiu !== "Cap")
+    ? "Sí"
+    : "No";
    
 
     // 📎 ADJUNT
