@@ -421,46 +421,59 @@ Si vostè llegeix aquest missatge i no és el destinatari assenyalat, l'empleat 
 </div>
 
 <script>
-const fileBtn = document.getElementById("fileBtn");
-const fileInput = document.getElementById("fileInput");
-const fileName = document.getElementById("fileName");
-const modal = document.getElementById("successModal");
+document.addEventListener("DOMContentLoaded", function(){
 
-fileBtn.addEventListener("click", () => fileInput.click());
+  const fileBtn = document.getElementById("fileBtn");
+  const fileInput = document.getElementById("fileInput");
+  const fileName = document.getElementById("fileName");
+  const modal = document.getElementById("successModal");
+  const form = document.getElementById("agenciaForm");
 
-fileInput.addEventListener("change", () => {
-  fileName.textContent = fileInput.files.length
-    ? fileInput.files[0].name
-    : "Cap arxiu seleccionat";
-});
-
-document.getElementById("agenciaForm").addEventListener("submit", async function(e){
-  e.preventDefault();
-
-  const formData = new FormData(this);
-
-  try {
-    const res = await fetch("/api/send-form", {
-      method: "POST",
-      body: formData
+  if(fileBtn && fileInput){
+    fileBtn.addEventListener("click", function(){
+      fileInput.click();
     });
 
-    if (res.ok) {
-      modal.classList.add("active");
-      this.reset();
-      fileName.textContent = "Cap arxiu seleccionat";
-    } else {
-      alert("Error en l'enviament");
-    }
-
-  } catch (error) {
-    alert("Error de connexió");
+    fileInput.addEventListener("change", function(){
+      fileName.textContent = fileInput.files.length
+        ? fileInput.files[0].name
+        : "Cap arxiu seleccionat";
+    });
   }
-});
 
-function closeModal(){
-  modal.classList.remove("active");
-}
+  if(form){
+    form.addEventListener("submit", async function(e){
+      e.preventDefault();
+
+      const formData = new FormData(this);
+
+      try{
+        const res = await fetch("/api/send-form", {
+          method: "POST",
+          body: formData
+        });
+
+        if(res.ok){
+          modal.classList.add("active");
+          this.reset();
+          fileName.textContent = "Cap arxiu seleccionat";
+        } else {
+          alert("Error en l'enviament");
+        }
+
+      } catch(err){
+        alert("Error de connexió");
+      }
+    });
+  }
+
+  window.closeModal = function(){
+    modal.classList.remove("active");
+  };
+
+});
+</script>
+  
 <div class="success-modal" id="successModal">
   <div class="success-box">
     <h3>T'has inscrit a l'agència de col·locació amb èxit!</h3>
