@@ -89,6 +89,34 @@ export default async function handler(req, res) {
       attachments,
     });
 
+    // --- ENVIAR A GOOGLE SHEETS (després del correu) ---
+const googleRes = await fetch(process.env.GOOGLE_SCRIPT_URL, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    dni: fields.dni,
+    nom: fields.nom,
+    cognom1: fields.cognom1,
+    cognom2: fields.cognom2,
+    dataNaixement: fields.dataNaixement,
+    genere: fields.genere,
+    estudis: fields.estudis,
+    discapacitat: fields.discapacitat,
+    feina2mesos: fields.feina2mesos,
+    email: fields.email,
+    telefon: fields.telefon,
+    poblacio: fields.poblacio,
+    prestacio: fields.prestacio,
+    collectiu: fields.collectiu,
+    sector: fields.sector,
+    disponibilitat: fields.disponibilitat
+  })
+});
+
+const googleText = await googleRes.text();
+if (!googleRes.ok) {
+  console.error("Google Sheets error:", googleRes.status, googleText);
+}
     return res.status(200).json({ ok: true });
 
   } catch (err) {
