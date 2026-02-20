@@ -194,6 +194,34 @@ textarea:focus{
   opacity:0.92;
 }
 
+function doPost(e) {
+  const sheet = SpreadsheetApp.getActiveSheet();
+  const data = JSON.parse(e.postData.contents);
+
+  sheet.appendRow([
+    new Date(),
+    data.dni,
+    data.nom,
+    data.cognom1,
+    data.cognom2,
+    data.dataNaixement,
+    data.genere,
+    data.estudis,
+    data.discapacitat,
+    data.teNIE,
+    data.teCollectiu,
+    data.feina2mesos,
+    data.email,
+    data.telefon,
+    data.poblacio,
+    data.prestacio,
+    data.sector,
+    data.disponibilitat
+  ]);
+
+  return ContentService.createTextOutput("OK");
+}
+  
 @media(max-width:1100px){
   .grid{
     grid-template-columns:repeat(2,1fr);
@@ -393,36 +421,55 @@ Si vostè llegeix aquest missatge i no és el destinatari assenyalat, l'empleat 
 </div>
 
 <script>
-const fileBtn=document.getElementById("fileBtn");
-const fileInput=document.getElementById("fileInput");
-const fileName=document.getElementById("fileName");
-const modal=document.getElementById("successModal");
+const fileBtn = document.getElementById("fileBtn");
+const fileInput = document.getElementById("fileInput");
+const fileName = document.getElementById("fileName");
+const modal = document.getElementById("successModal");
 
-fileBtn.addEventListener("click",()=>fileInput.click());
+fileBtn.addEventListener("click", () => fileInput.click());
 
-fileInput.addEventListener("change",()=>{
-fileName.textContent=fileInput.files.length?fileInput.files[0].name:"Cap arxiu seleccionat";
+fileInput.addEventListener("change", () => {
+  fileName.textContent = fileInput.files.length
+    ? fileInput.files[0].name
+    : "Cap arxiu seleccionat";
 });
 
-document.getElementById("agenciaForm").addEventListener("submit",async function(e){
-e.preventDefault();
-const formData=new FormData(this);
-const res=await fetch("/api/send-form",{method:"POST",body:formData});
-if(res.ok){
-modal.classList.add("active");
-this.reset();
-fileName.textContent="Cap arxiu seleccionat";
-}else{
-alert("Error en l'enviament");
-}
+document.getElementById("agenciaForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  const formData = new FormData(this);
+
+  try {
+    const res = await fetch("/api/send-form", {
+      method: "POST",
+      body: formData
+    });
+
+    if (res.ok) {
+      modal.classList.add("active");
+      this.reset();
+      fileName.textContent = "Cap arxiu seleccionat";
+    } else {
+      alert("Error en l'enviament");
+    }
+
+  } catch (error) {
+    alert("Error de connexió");
+  }
 });
 
 function closeModal(){
-modal.classList.remove("active");
+  modal.classList.remove("active");
 }
+</script>
+<div class="success-modal" id="successModal">
+  <div class="success-box">
+    <h3>T'has inscrit a l'agència de col·locació amb èxit!</h3>
+    <button type="button" onclick="closeModal()">Tancar</button>
+  </div>
+</div>
 
 </body>
 </html>
 
-</body>
-</html>
+
